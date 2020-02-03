@@ -3,10 +3,10 @@
 block_cipher = None
 
 
-a = Analysis(['PonyTrainer.py'],
-             pathex=['Z:\\home\\phil\\Projects\\SAP5\\software'],
-             binaries=[('libusb-1.0.dll', '.')],
-             datas=[('manual.pdf', '.')],
+a = Analysis(['PonyTrainer/PonyTrainer.py'],
+             pathex=['/home/phil/Projects/PonyTrainer'],
+             binaries=[],
+             datas=[('doc/manual.pdf', '.')],
              hiddenimports=[],
              hookspath=[],
              runtime_hooks=[],
