@@ -1,5 +1,8 @@
 #!/usr/bin/python3
 from struct_parser import StructParser
+import version
+
+
 class Config(StructParser):
 
     FMT = [
@@ -37,11 +40,10 @@ def default_config():
     return c
             
 def get_config(bootloader):
-    APP_CONFIG_LOCATION = 0x9D009000
-    APP_CONFIG_SIZE = 0x00000800
+    fw_info = version.get_firmware_info(bootloader)
     #FIXME provide default config in case not yet been saved to flash
     conf = default_config()
-    for i in range(APP_CONFIG_LOCATION, APP_CONFIG_LOCATION+APP_CONFIG_SIZE, Config.get_len()):
+    for i in range(fw_info.config.location, fw_info.config.location + fw_info.config.size, Config.get_len()):
 	    text = bootloader.read_program(i, Config.get_len())
 	    if text[0]==0xff:
 		    break

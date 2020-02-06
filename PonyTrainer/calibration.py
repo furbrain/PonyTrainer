@@ -3,6 +3,7 @@ import datetime
 import math
 
 from struct_parser import StructParser
+import version
 
     
 class Calibration(StructParser):
@@ -16,8 +17,7 @@ class Calibration(StructParser):
         return not math.isnan(self.mag[0])
 
 def read_cal(bootloader):
-    APP_CAL_LOCATION = 0x9D009800
-    APP_CAL_SIZE = 0x00002800
-    data = bootloader.read_program(APP_CAL_LOCATION, Calibration.get_len())
+    fw_info = version.get_firmware_info(bootloader)
+    data = bootloader.read_program(fw_info.calibration.location, Calibration.get_len())
     cal = Calibration.from_buffer(data)
     return cal

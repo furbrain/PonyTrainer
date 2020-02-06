@@ -2,6 +2,7 @@
 import datetime
 
 from struct_parser import StructParser
+import version
 
 def get_surveys(leg_list):
     surveys = {}
@@ -31,9 +32,8 @@ class Leg(StructParser):
         return self.time != 0xffffffff
 
 def read_legs(bootloader):
-    APP_LEG_LOCATION = 0x9D00A000
-    APP_LEG_SIZE = 0x00002800
-    data = bootloader.read_program(APP_LEG_LOCATION, APP_LEG_SIZE)
+    fw_info = version.get_firmware_info(bootloader)
+    data = bootloader.read_program(fw_info.legs.location, fw_info.legs.size)
     legs = Leg.read_array(data)
     return legs
 

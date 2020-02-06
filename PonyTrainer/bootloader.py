@@ -18,6 +18,10 @@ from functools import reduce
 # plans...
 # load in hex file - possibly munged to separate out the flash bits etc...
 # probably best do this directly, and load into program, flash and config mems.
+APP_CONFIG_LOCATION = 0x9D009000
+APP_CONFIG_SIZE = 0x00000800
+APP_LEG_LOCATION = 0x9D00A000
+APP_LEG_SIZE = 0x00002800
 
 
 CLEAR_FLASH = 100
@@ -91,6 +95,10 @@ class HexFile:
                     
     def __len__(self):
         return len(self.program.elements)
+        
+    def insert(self, address, data):
+        l =len(data)
+        self.program[address:address+l] = data
 
 class ProgrammerError(Exception):
     pass
@@ -155,8 +163,14 @@ class Programmer:
             raise ProgrammerError("Error writing data")
         return r
 
-    def write_program(self,hexfile,set_range=None,set_progress=None):
+    def write_program(self,hexfile,set_range=None,set_progress=None, config=None, legs=None):
         #this is to write 64 byte blocks...
+        if config is not None:
+            sys.stdout.write("Merging config")
+            hexfile.insert(APP_CONFIG_LOCATION, config)
+        if legs is not None:
+            sys.stdout.write("Merging legs")
+            hexfile.insert(APP_LEG_LOCATION, legs)
         self.write_data(CLEAR_FLASH,0,[],timeout=10000)
         if set_range:
             set_range(len(hexfile.program))
