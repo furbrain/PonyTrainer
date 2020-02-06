@@ -6,6 +6,8 @@ import os
 import sys
 import datetime
 import webbrowser
+import json
+from functools import partial
 
 import gui
 import importer
@@ -13,9 +15,8 @@ import svxtextctrl
 import bootloader
 import config
 import calibration
-import json
 import struct_parser
-from functools import partial
+import version
 
 
 class ActualMainFrame(gui.PonyFrame):
