@@ -7,4 +7,4 @@ wine ~/.wine/drive_c/Python38/Scripts/pyinstaller.exe \
   --noconfirm \
   --onefile \
   --name "PonyTrainer-$VERSION.exe" \
-  PonyTrainer/PonyTrainer.py
+  src/PonyTrainer.py

@@ -6,4 +6,4 @@ pyinstaller \
   --noconfirm \
   --onefile \
   --name "PonyTrainer-$VERSION-linux.run" \
-  PonyTrainer/PonyTrainer.py
+  src/PonyTrainer.py
