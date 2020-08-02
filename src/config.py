@@ -1,6 +1,6 @@
 #!/usr/bin/python3
-from struct_parser import StructParser
-import version
+from .struct_parser import StructParser
+from . import version
 
 
 class Config(StructParser):
@@ -40,8 +40,8 @@ def default_config():
     return c
             
 def get_config(bootloader):
-    fw_info = version.get_firmware_info(bootloader)
-    #FIXME provide default config in case not yet been saved to flash
+    fw_info = bootloader.get_fw_info()
+
     conf = default_config()
     for i in range(fw_info.config.location, fw_info.config.location + fw_info.config.size, Config.get_len()):
 	    text = bootloader.read_program(i, Config.get_len())
@@ -49,4 +49,9 @@ def get_config(bootloader):
 		    break
 	    conf = Config.from_buffer(text)	
     return conf
+
+if __name__ == "__main__":
+    import bootloader
+    prog = bootloader.Programmer()
+    print(get_config(prog))
 

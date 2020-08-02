@@ -13,7 +13,7 @@ setuptools.setup(
     description="Companion program for the Shetland Attack Pony 5",
     long_description=long_description,
     url="https://github.com/furbrain/PonyTrainer",
-    packages=setuptools.find_packages("src"),
+    packages=["src"],
     scripts=["src/PonyTrainer.py"],
     classifiers=[
         "Programming Language :: Python :: 3",

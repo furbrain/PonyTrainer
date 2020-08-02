@@ -1,8 +1,8 @@
 #!/usr/bin/python3
 import datetime
 
-from struct_parser import StructParser
-import version
+from .struct_parser import StructParser
+from . import version
 
 def get_surveys(leg_list):
     surveys = {}

@@ -1,9 +1,9 @@
 import math
 import wx
 
-import gui
-import legs
-import config
+from . import gui
+from . import legs
+from . import config
 
 
 FEET_PER_METRE = 3.281

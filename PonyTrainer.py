@@ -9,15 +9,16 @@ import webbrowser
 import json
 from functools import partial
 
-import gui
-import importer
-import svxtextctrl
-import bootloader
-import config
-import calibration
-import struct_parser
-import version
-
+from src import gui
+from src import importer
+from src import svxtextctrl
+from src import bootloader
+from src import config
+from src import calibration
+from src import struct_parser
+from src import version
+from src import client_config
+from pyupdater import client
 
 class ActualMainFrame(gui.PonyFrame):
     def __init__(self, *args, **kwargs):
@@ -121,7 +122,7 @@ class ActualMainFrame(gui.PonyFrame):
             try:
                 with open(fileDialog.GetPath(),"w") as f:
                      json.dump(data,f,cls=struct_parser.StructEncoder)
-            except IOError:                 
+            except IOError as e:
                 wx.MessageDialog(self, "Failed to save file:\n%s" % e).ShowModal()
                 
     def About(self, event):
@@ -142,7 +143,7 @@ class ActualMainFrame(gui.PonyFrame):
                 ctrl = svxtextctrl.SVXTextCtrl(self, filename=pathname)
                 try:
                     ctrl.LoadFile(pathname)
-                except IOError:
+                except IOError as e:
                     wx.MessageDialog(self, "Failed to load file:\n%s" % e).ShowModal()
                 else:
                     self.create_pane(ctrl=ctrl)
@@ -226,7 +227,7 @@ class ActualMainFrame(gui.PonyFrame):
 
         
     def ShowManual(self, event):  # wxGlade: PonyFrame.<event_handler>
-        manual = self.resource_path('manual.pdf')
+        manual = self.resource_path('src/manual.pdf')
         webbrowser.open(manual)
                         
 PonyTrainer = wx.App(False)

@@ -2,6 +2,7 @@
 
 import time
 import bootloader
+import hexfile
 import sys
 import datetime
     
@@ -18,13 +19,19 @@ try:
     print("Connecting to device")
     prog = bootloader.Programmer()
     print("%s found" % prog.get_name())
-    config = prog.read_program(bootloader.APP_CONFIG_LOCATION, bootloader.APP_CONFIG_SIZE)
-    legs = prog.read_program(bootloader.APP_LEG_LOCATION, bootloader.APP_LEG_SIZE)    
+    fw_info = prog.get_fw_info()
+    #config = prog.read_program(fw_info.config.location, fw_info.config.size)
+    #legs = prog.read_program(fw_info.legs.location, fw_info.legs.size)    
     print("Loading hexfile")
-    hexfile  = bootloader.HexFile(sys.argv[1])
+    hexfile  = hexfile.HexFile(sys.argv[1])
+    #print("Merging config")
+    #hexfile.insert(fw_info.config.location, config)
+    #print("Merging legs")
+    #hexfile.insert(fw_info.legs.location, legs)
+
     print("Programming %d bytes" % len(hexfile))
     show_progress(0)
-    prog.write_program(hexfile,set_progress=show_progress, config=config, legs=legs)
+    prog.write_program(hexfile,set_progress=show_progress)
     print("Verifying %d bytes" % len(hexfile))
     show_progress(0)
     prog.verify_program(hexfile,set_progress=show_progress)

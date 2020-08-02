@@ -1,7 +1,6 @@
 #!/usr/bin/python3
 
 import sys
-import re
 import operator
 import usb
 import usb.backend.libusb1
@@ -13,15 +12,12 @@ import array
 import platform
 import os
 
-import sparse_list
 from functools import reduce
+
+from .version import Version
 # plans...
 # load in hex file - possibly munged to separate out the flash bits etc...
 # probably best do this directly, and load into program, flash and config mems.
-APP_CONFIG_LOCATION = 0x9D009000
-APP_CONFIG_SIZE = 0x00000800
-APP_LEG_LOCATION = 0x9D00A000
-APP_LEG_SIZE = 0x00002800
 
 
 CLEAR_FLASH = 100
@@ -50,55 +46,6 @@ def clean_list(buffer):
         if buffer[i] is None:
             buffer[i] = 0x00
 
-class HexFileError(Exception):
-        def _init__(self,value):
-            self.value = value
-        def __str__(self):
-            return repr(self.value)
-
-class HexFile:
-    def __init__(self,fname):
-        self.program = sparse_list.SparseList(0x100000000)
-        page = 0;
-        with open(fname, "rU") as f:
-            for s in f:
-                if (s[0] == ":"):
-                    #good - it starts sensibly...
-                    numbers = bytearray.fromhex(s.strip()[1:])
-                    reclen = numbers[0]
-                    offset = numbers[1]*256 + numbers[2]
-                    rectype = numbers[3]
-                    data = numbers[4:-1]
-                    checksum = reduce(operator.add,numbers) & 0xff
-                    if ((checksum != 0) or (reclen != len(data))):
-                        raise HexFileError("Bad checksum")
-                else:
-                    raise HexFileError("Bad format")
-                #so far, so good. Now to slot the data in...
-                if (rectype not in (0,1,4)):
-                    # rectype not known. Fall over
-                    raise HexFileError("Unknown record format")
-                if (rectype == 0):
-                    self.program[page+offset:page+offset+reclen] = data
-                if (rectype == 1):
-                    #end of file
-                    return None
-                if (rectype == 4):
-                    if offset != 0:
-                        #really should be zero...
-                        raise HexFileError("Bad format")
-                    if reclen != 2:
-                        #incorrect length
-                        raise HexFileError("Bad format")
-                    page = data[0]*0x1000000 + data[1]*0x10000
-                    page  = page | 0x80000000
-                    
-    def __len__(self):
-        return len(self.program.elements)
-        
-    def insert(self, address, data):
-        l =len(data)
-        self.program[address:address+l] = data
 
 class ProgrammerError(Exception):
     pass
@@ -163,14 +110,8 @@ class Programmer:
             raise ProgrammerError("Error writing data")
         return r
 
-    def write_program(self,hexfile,set_range=None,set_progress=None, config=None, legs=None):
+    def write_program(self,hexfile,set_range=None,set_progress=None):
         #this is to write 64 byte blocks...
-        if config is not None:
-            sys.stdout.write("Merging config")
-            hexfile.insert(APP_CONFIG_LOCATION, config)
-        if legs is not None:
-            sys.stdout.write("Merging legs")
-            hexfile.insert(APP_LEG_LOCATION, legs)
         self.write_data(CLEAR_FLASH,0,[],timeout=10000)
         if set_range:
             set_range(len(hexfile.program))
@@ -258,6 +199,11 @@ class Programmer:
     def write_uart(self, text):
         return self.write_data(WRITE_UART, 0, [ord(x) for x in text])
         
+    def get_fw_info(self):
+        data = self.read_program(Version.LOCATION, Version.get_len())
+        info = Version.from_data(data)
+        return info
+        
     def get_name(self):
         adjectives = ['Angry', 'Bored', 'Curious', 'Devious', 'Excited', 'Fierce', 'Grumpy', 'Hungry', 'Idle', 'Jealous']
         animals = ['Antelope', 'Badger', 'Cheetah', 'Dolphin', 'Eagle', 'Fox', 'Gorilla', 'Hamster', 'Iguana', 'Jaguar']
@@ -269,4 +215,5 @@ class Programmer:
 if __name__=="__main__":
     p = Programmer()
     print(p.get_name())
+    print(p.get_fw_info())
 
