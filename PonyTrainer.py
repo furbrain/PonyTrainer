@@ -229,8 +229,30 @@ class ActualMainFrame(gui.PonyFrame):
     def ShowManual(self, event):  # wxGlade: PonyFrame.<event_handler>
         manual = self.resource_path('src/manual.pdf')
         webbrowser.open(manual)
-                        
+
+def print_status_info(info):
+    total = info.get(u'total')
+    downloaded = info.get(u'downloaded')
+    status = info.get(u'status')
+    print(downloaded, total, status)
+
+
 PonyTrainer = wx.App(False)
+update_config = client_config.ClientConfig()
+update_client = client.Client(client_config.ClientConfig(), refresh=True, progress_hooks=[print_status_info])
+print(update_client.data_dir)
+print(update_client.easy_data)
+print(update_client.version)
+app_update = update_client.update_check(update_config.APP_NAME, version.SOFTWARE_VERSION)
+if app_update:
+    if wx.MessageBox("There is a new version available, update?", "New version", wx.YES_NO)==wx.YES:
+        app_update.download()
+        if app_update.is_downloaded():
+            app_update.extract_restart()
+        else:
+            wx.MessageBox("Could not download, starting as normal")
+else:
+    wx.MessageBox("No update available")
 frame = ActualMainFrame(None, wx.ID_ANY, "PonyTrainer")
 PonyTrainer.SetTopWindow(frame)
 frame.Show()

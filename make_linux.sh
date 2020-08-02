@@ -1,9 +1,8 @@
 #!/bin/sh
 VERSION=`git describe --tags`
-echo "VERSION=\"$VERSION\"" > PonyTrainer/version.py
-pyinstaller \
+pyupdater make-spec \
   --add-data="doc/manual.pdf:." \
-  --noconfirm \
   --onefile \
   --name "PonyTrainer-$VERSION-linux.run" \
+  --paths "src" \
   src/PonyTrainer.py

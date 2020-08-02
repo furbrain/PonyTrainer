@@ -33,3 +33,6 @@ MPLABXLog*
 *#
 /build/
 /dist/
+/.idea/
+/.pyupdater/
+/pyu-data/
