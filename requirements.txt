@@ -1,0 +1,4 @@
+wxPython==4.0.7
+pyinstaller
+pyupdater
+pyusb==1.0.2
