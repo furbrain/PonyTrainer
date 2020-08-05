@@ -4,7 +4,7 @@ block_cipher = None
 
 
 a = Analysis(['./PonyTrainer.py'],
-             pathex=['.'],
+             pathex=['.', '/home/appveyor/venv3.6/lib/python3.6/site-packages'],
              binaries=[],
              datas=[('doc/manual.pdf', '.')],
              hiddenimports=[],
