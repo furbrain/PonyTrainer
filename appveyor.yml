@@ -5,10 +5,15 @@ image:
   - Ubuntu
 
 build: off
+stack: Python 3.7
+init:
+    - cmd: set PATH=%PY_DIR%;%PY_DIR%\Scripts;%PATH%
+    - cmd: python -m pip install pipenv
 
 install:
-  - sh: sudo apt-get install python-wxgtk3.0
-  - sh: pip3 install -r requirements
+  - sh: pip install -U -f https://extras.wxpython.org/wxPython4/extras/linux/gtk3/ubuntu-16.04 wxPython
+  - sh: pip3 install -r requirements.txt
+  - cmd: python -m pip install -r requirements.txt
 
 test_script:
   - sh: bash make_linux.sh
