@@ -1,4 +1,3 @@
 #!/bin/sh
-VERSION=`git describe --tags`
-pyupdater build --app-version $VERSION linux.spec
+pyupdater build --app-version $APPVEYOR_BUILD_VERSION linux.spec
 pyupdater pkg -p -s

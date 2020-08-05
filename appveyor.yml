@@ -2,7 +2,7 @@
 ---
 image:
   - Ubuntu
-#  - Visual Studio 2019
+  - Visual Studio 2019
 
 environment:
     PY_DIR: C:\Python36
@@ -14,7 +14,7 @@ environment:
       secure: lyep0eVd6GHFcxfNu45Cmvy8SgKaShvCrlr1vpMj8LFs3g4WfM/KPbGtpld77xcTCUu028u5zbFYw+8N11G6Gw==
     
 
-
+version: '1.0.{build}'
 build: off
 
 stack: Python 3.6
@@ -39,5 +39,12 @@ test_script:
 
 artifacts:
   - path: 'pyu-data/deploy/*'
+  
+deploy:
+  - provider: GitHub
+    artifact: 'pyu-data/deploy/*'
+    draft: true
+    on:
+      branch: master
   
 

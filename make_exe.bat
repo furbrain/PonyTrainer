@@ -1,2 +1,2 @@
-pyupdater build --app-version=1.3.2 windows.spec
+pyupdater build --app-version %APPVEYOR_BUILD_VERSION% windows.spec
 pyupdater pkg -p -s
