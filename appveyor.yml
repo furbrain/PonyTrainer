@@ -2,7 +2,7 @@
 ---
 image:
   - Ubuntu
-  - Visual Studio 2019
+#  - Visual Studio 2019
 
 environment:
     PY_DIR: C:\Python36
@@ -29,7 +29,7 @@ init:
 
 install:
   - cmd: appveyor-tools\secure-file -decrypt keypack.pyu.enc -secret %KEY_PACK_SECRET% -salt %KEY_PACK_SALT%
-  - sh: ./appveyor-tools/secure-file -decrypt keypack.pyu.enc -secret %KEY_PACK_SECRET% -salt %KEY_PACK_SALT%
+  - sh: ./appveyor-tools/secure-file -decrypt keypack.pyu.enc -secret $KEY_PACK_SECRET -salt $KEY_PACK_SALT
   - pip3 install -r requirements.txt
   - pyupdater keys -i keypack.pyu
 
