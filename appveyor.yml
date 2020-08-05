@@ -5,11 +5,14 @@ image:
   - Visual Studio 2019
 
 environment:
-    # PY_PYTHON: 3.8-32
-    # PYTHON: C:\Python38
     PY_DIR: C:\Python36
     PYTHONIOENCODING: utf_8
     PIPENV_IGNORE_VIRTUALENVS: 1
+    KEY_PACK:
+      secure: ne6m1BFjUCxerLh6TuWJd0Gx978wIwI4d4lhXKA9Y1MSDAxENnmSTi1v7Vo/PfRcbYrKIKfOFJxNv1qKLlv2tkWjgb1i4X5jA7nQzvCZ3IfTqZAZQYjCwm1WnZDB51OfqJsNi6Bo0x7HFgEV2pcl+ojmVrbNmPr1W8X39V5h+FPDNfccjGYnJjAQmQ28UEBaGAkGo5Z+tbmKCWDNHvYVxU37yaTUuQgW4LOGxSqM6MzWBpsBp/rzpLxRiEP3exsptS7b0CRUAk4BF/0HCrf+GYRM4qgaAjzraIEoDTM1iR21W9Q08Y02G8LQclgaUMJYp8afQd+223FAxveaAXpX9RVOlsRY/q0elh6N1ZvQaABfDAyXg4cG820+77fR03S0OOgt9PTqmW/QsPxUmSB9rR9BeE7ZNZt+yAa5Sl3hrIO3YHbB7n9BlTnyOQSnZ3iBydbGoa95xdktEYxpB8yb0Td5BRllv17pOHZGdD4h8ls=
+
+    
+
 
 build: off
 
@@ -24,8 +27,12 @@ init:
     
 
 install:
-  - sh: pip3 install -r requirements.txt
-  - cmd: python -m pip install -r requirements.txt
+  - echo "$KEY_PACK" > keypack.pyu
+  - pip3 install -r requirements.txt
+  - pyupdater init
+  - pyupdater keys -i
+  - keypack.pyu
 
 test_script:
   - sh: bash make_linux.sh
+  - cmd: make_exe.bat
