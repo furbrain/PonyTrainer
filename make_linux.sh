@@ -1,3 +1,3 @@
 #!/bin/sh
-pyupdater build --app-version $APPVEYOR_BUILD_VERSION linux.spec
+pyupdater build -D -pyinstaller-log-info --app-version $APPVEYOR_BUILD_VERSION linux.spec
 pyupdater pkg -p -s
