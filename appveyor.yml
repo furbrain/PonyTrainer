@@ -44,6 +44,8 @@ deploy:
   - provider: GitHub
     artifact: 'pyu-data/deploy/*'
     draft: true
+    auth_token:
+      secure: SNbO+xcQuYFq0TbfrCdtFM8iXqREdd3yw7TH9Gw+IoeKWOcRl5BaydJkHmx2YMpz
     on:
       branch: master
   
