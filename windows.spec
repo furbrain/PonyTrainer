@@ -2,10 +2,10 @@
 block_cipher = None
 a = Analysis(['.\\PonyTrainer.py'],
              pathex=['.'],
-             binaries=[('libusb-1.0.dll', '.'), ('vcruntime140.dll', '.')],
-             datas=[('doc/manual.pdf', '.')],
+             binaries=[('libusb-1.0.dll', '.'),],
+             datas=[('doc/manual.pdf', '.'), ('vcruntime140.dll', '.'), ],
              hiddenimports=[],
-             runtime_hooks=[],
+             runtime_hooks=['c:\\python36\\lib\\site-packages\\pyupdater\\hooks'],
              excludes=[],
              win_no_prefer_redirects=False,
              win_private_assemblies=False,
