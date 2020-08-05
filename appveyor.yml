@@ -29,9 +29,7 @@ init:
 install:
   - echo "$KEY_PACK" > keypack.pyu
   - pip3 install -r requirements.txt
-  - pyupdater init
-  - pyupdater keys -i
-  - keypack.pyu
+  - pyupdater keys -i keypack.pyu
 
 test_script:
   - sh: bash make_linux.sh

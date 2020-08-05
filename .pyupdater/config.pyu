@@ -1,0 +1,20 @@
+{
+  "config_dir": "/home/phil/Projects/PonyTrainer/.pyupdater",
+  "filename": "/home/phil/Projects/PonyTrainer/.pyupdater/config.pyu",
+  "count": 0,
+  "app_config": {
+    "APP_NAME": "PonyTrainer",
+    "CLIENT_CONFIG_PATH": [
+      "client_config.py"
+    ],
+    "COMPANY_NAME": "Underwood Underground",
+    "PLUGIN_CONFIGS": {},
+    "UPDATE_PATCHES": false,
+    "MAX_DOWNLOAD_RETRIES": 3,
+    "HTTP_TIMEOUT": 30,
+    "UPDATE_URLS": [
+      "http://shetlandattackpony.co.uk/releases/"
+    ],
+    "DATA_DIR": "/home/phil/Projects/PonyTrainer"
+  }
+}
