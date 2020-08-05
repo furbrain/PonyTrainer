@@ -34,3 +34,8 @@ install:
 test_script:
   - sh: bash make_linux.sh
   - cmd: make_exe.bat
+
+artifacts:
+  - path: '*.spec'
+  
+
