@@ -36,7 +36,9 @@ install:
 
 test_script:
   - sh: pyupdater build -D --pyinstaller-log-info --app-version $APPVEYOR_BUILD_VERSION linux.spec
+  - sh: cat .pyupdater/work/linux/warn-linux.txt
   - cmd: pyupdater build -D --pyinstaller-log-info --app-version %APPVEYOR_BUILD_VERSION% windows.spec
+  - cmd: type .pyupdater\work\windows\warn-windows.txt
   - pyupdater pkg -p -s
 
 artifacts:
