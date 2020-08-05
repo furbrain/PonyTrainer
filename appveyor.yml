@@ -1,16 +1,17 @@
 # appveyor.yml
 ---
 image:
-#  - Ubuntu
+  - Ubuntu
   - Visual Studio 2019
 
 environment:
     PY_DIR: C:\Python36
     PYTHONIOENCODING: utf_8
     PIPENV_IGNORE_VIRTUALENVS: 1
-    KEY_PACK:
-      secure: ne6m1BFjUCxerLh6TuWJd0Gx978wIwI4d4lhXKA9Y1MSDAxENnmSTi1v7Vo/PfRcbYrKIKfOFJxNv1qKLlv2tkWjgb1i4X5jA7nQzvCZ3IfTqZAZQYjCwm1WnZDB51OfqJsNi6Bo0x7HFgEV2pcl+ojmVrbNmPr1W8X39V5h+FPDNfccjGYnJjAQmQ28UEBaGAkGo5Z+tbmKCWDNHvYVxU37yaTUuQgW4LOGxSqM6MzWBpsBp/rzpLxRiEP3exsptS7b0CRUAk4BF/0HCrf+GYRM4qgaAjzraIEoDTM1iR21W9Q08Y02G8LQclgaUMJYp8afQd+223FAxveaAXpX9RVOlsRY/q0elh6N1ZvQaABfDAyXg4cG820+77fR03S0OOgt9PTqmW/QsPxUmSB9rR9BeE7ZNZt+yAa5Sl3hrIO3YHbB7n9BlTnyOQSnZ3iBydbGoa95xdktEYxpB8yb0Td5BRllv17pOHZGdD4h8ls=
-
+    KEY_PACK_SECRET:
+      secure: ybUuwsKZRNlTXAcoY82JYA==
+    KEY_PACK_SALT:
+      secure: lyep0eVd6GHFcxfNu45Cmvy8SgKaShvCrlr1vpMj8LFs3g4WfM/KPbGtpld77xcTCUu028u5zbFYw+8N11G6Gw==
     
 
 
@@ -27,7 +28,8 @@ init:
     
 
 install:
-  - echo "$KEY_PACK" > keypack.pyu
+  - cmd: appveyor-tools\secure-file -decrypt keypack.pyu.enc -secret %KEY_PACK_SECRET% -salt %KEY_PACK_SALT%
+  - sh: ./appveyor-tools/secure-file -decrypt keypack.pyu.enc -secret %KEY_PACK_SECRET% -salt %KEY_PACK_SALT%
   - pip3 install -r requirements.txt
   - pyupdater keys -i keypack.pyu
 
