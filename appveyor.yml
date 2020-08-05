@@ -7,7 +7,7 @@ image:
 build: off
 
 install:
-- pip install tox
+  - pip3 install -r requirements
 
 test_script:
-- tox
+  - sh: bash make_linux.sh
