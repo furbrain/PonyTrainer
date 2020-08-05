@@ -36,6 +36,6 @@ test_script:
   - cmd: make_exe.bat
 
 artifacts:
-  - path: '*.spec'
+  - path: 'pyu-data/deploy/*'
   
 
