@@ -1,0 +1,23 @@
+{
+  "runtimeTarget": {
+    "name": ".NETCoreApp,Version=v3.1",
+    "signature": ""
+  },
+  "compilationOptions": {},
+  "targets": {
+    ".NETCoreApp,Version=v3.1": {
+      "secure-file/1.0.1.29": {
+        "runtime": {
+          "secure-file.dll": {}
+        }
+      }
+    }
+  },
+  "libraries": {
+    "secure-file/1.0.1.29": {
+      "type": "project",
+      "serviceable": false,
+      "sha512": ""
+    }
+  }
+}
