@@ -7,7 +7,8 @@ image:
 build: off
 
 install:
-  - pip3 install -r requirements
+  - sh: apt-get install python-wxgtk3.0
+  - sh: pip3 install -r requirements
 
 test_script:
   - sh: bash make_linux.sh
