@@ -30,6 +30,7 @@ init:
 install:
   - cmd: appveyor-tools\secure-file -decrypt keypack.pyu.enc -secret %KEY_PACK_SECRET% -salt %KEY_PACK_SALT%
   - sh: ./appveyor-tools/secure-file -decrypt keypack.pyu.enc -secret $KEY_PACK_SECRET -salt $KEY_PACK_SALT
+  - pip3 install --upgrade 'setuptools<45.0'
   - pip3 install -r requirements.txt
   - pyupdater keys -i keypack.pyu
 
