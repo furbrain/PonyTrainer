@@ -1,0 +1,22 @@
+# appveyor.yml
+---
+image:
+#  - Visual Studio 2019
+  - Ubuntu
+
+build: off
+stack: Python 3.7
+init:
+    - cmd: set PATH=%PY_DIR%;%PY_DIR%\Scripts;%PATH%
+    - cmd: python -m pip install pipenv
+    - sh: sudo apt-get -y update
+    - sh: sudo apt-get -y install python3-pip python3-dev debhelper devscripts debhelper devscripts p7zip-full libssl-dev dpkg-dev build-essential libjpeg-dev libtiff-dev libsdl2-dev libnotify-dev freeglut3 ibus-gtk3 xvfb libhunspell-dev
+    - sh: sudo apt-get -y install python-wxgtk3.0
+    
+
+install:
+  - sh: pip3 install -r requirements.txt
+  - cmd: python -m pip install -r requirements.txt
+
+test_script:
+  - sh: bash make_linux.sh
