@@ -3,8 +3,8 @@
 block_cipher = None
 
 
-a = Analysis(['/home/phil/Projects/PonyTrainer/PonyTrainer.py'],
-             pathex=['/home/phil/Projects/PonyTrainer', '/home/phil/Projects/PonyTrainer/src'],
+a = Analysis(['./PonyTrainer.py'],
+             pathex=['.'],
              binaries=[],
              datas=[('doc/manual.pdf', '.')],
              hiddenimports=[],

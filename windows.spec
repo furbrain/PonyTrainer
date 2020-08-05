@@ -1,11 +1,10 @@
 # -*- mode: python ; coding: utf-8 -*-
 block_cipher = None
-a = Analysis(['C:\\projects\\ponytrainer\\PonyTrainer.py'],
-             pathex=['C:\\projects\\ponytrainer', 'C:\\projects\\ponytrainer'],
-             binaries=[('libusb-1.0.dll', '.')],
+a = Analysis(['.\\PonyTrainer.py'],
+             pathex=['.'],
+             binaries=[('libusb-1.0.dll', '.'), ('vcruntime140.dll', '.')],
              datas=[('doc/manual.pdf', '.')],
              hiddenimports=[],
-             hookspath=['c:\\python36\\lib\\site-packages\\pyupdater\\hooks'],
              runtime_hooks=[],
              excludes=[],
              win_no_prefer_redirects=False,
