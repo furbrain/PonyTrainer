@@ -35,8 +35,9 @@ install:
   - pyupdater keys -i keypack.pyu
 
 test_script:
-  - sh: bash make_linux.sh
-  - cmd: make_exe.bat
+  - sh: pyupdater build -D --pyinstaller-log-info --app-version $APPVEYOR_BUILD_VERSION linux.spec
+  - cmd: pyupdater build -D --pyinstaller-log-info --app-version %APPVEYOR_BUILD_VERSION% windows.spec
+  - pyupdater pkg -p -s
 
 artifacts:
   - path: 'pyu-data/deploy/*'
