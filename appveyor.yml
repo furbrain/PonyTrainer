@@ -24,15 +24,14 @@ init:
     - cmd: python -m pip install pipenv
     - sh: sudo apt-get -y update
     - sh: sudo apt-get -y install python3-pip python3.6-dev debhelper devscripts debhelper devscripts p7zip-full libssl-dev dpkg-dev build-essential libjpeg-dev libtiff-dev libsdl2-dev libnotify-dev freeglut3 ibus-gtk3 xvfb libhunspell-dev tree
-    - sh: pip3 install -v -v -U -f https://extras.wxpython.org/wxPython4/extras/linux/gtk3/ubuntu-18.04 wxPython
-    - sh: tree /home/appveyor/venv3.6
-    - cmd: pip3 install -U wxPython 
     
 
 install:
   - cmd: appveyor-tools\secure-file -decrypt keypack.pyu.enc -secret %KEY_PACK_SECRET% -salt %KEY_PACK_SALT%
   - sh: ./appveyor-tools/secure-file -decrypt keypack.pyu.enc -secret $KEY_PACK_SECRET -salt $KEY_PACK_SALT
   - pip3 install --upgrade 'setuptools<45.0'
+  - sh: pip3 install -U -f https://extras.wxpython.org/wxPython4/extras/linux/gtk3/ubuntu-18.04 wxPython
+  - cmd: pip3 install -U wxPython 
   - pip3 install -r requirements.txt
   - pyupdater keys -i keypack.pyu
 
