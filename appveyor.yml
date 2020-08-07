@@ -37,9 +37,9 @@ install:
 
 test_script:
   - sh: export PYTHONPATH=/home/appveyor/venv3.6
-  - sh: pyinstaller -v linux.spec
+  - sh: pyinstaller linux.spec
   - sh: cat .pyupdater/work/linux/warn-linux.txt
-  - cmd: pyinstaller -v windows.spec
+  - cmd: pyinstaller windows.spec
   - cmd: type .pyupdater\work\windows\warn-windows.txt
 
 artifacts:
