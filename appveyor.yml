@@ -27,24 +27,23 @@ init:
     
 
 install:
-  - cmd: appveyor-tools\secure-file -decrypt keypack.pyu.enc -secret %KEY_PACK_SECRET% -salt %KEY_PACK_SALT%
-  - sh: ./appveyor-tools/secure-file -decrypt keypack.pyu.enc -secret $KEY_PACK_SECRET -salt $KEY_PACK_SALT
+#  - cmd: appveyor-tools\secure-file -decrypt keypack.pyu.enc -secret %KEY_PACK_SECRET% -salt %KEY_PACK_SALT%
+#  - sh: ./appveyor-tools/secure-file -decrypt keypack.pyu.enc -secret $KEY_PACK_SECRET -salt $KEY_PACK_SALT
   - pip3 install --upgrade 'setuptools<45.0'
   - sh: pip3 install -U -f https://extras.wxpython.org/wxPython4/extras/linux/gtk3/ubuntu-18.04 wxPython
   - cmd: pip3 install -U wxPython 
   - pip3 install -r requirements.txt
-  - pyupdater keys -i keypack.pyu
+#  - pyupdater keys -i keypack.pyu
 
 test_script:
   - sh: export PYTHONPATH=/home/appveyor/venv3.6
-  - sh: pyupdater build -D --pyinstaller-log-info --app-version $APPVEYOR_BUILD_VERSION linux.spec
+  - sh: pyinstaller -v linux.spec
   - sh: cat .pyupdater/work/linux/warn-linux.txt
-  - cmd: pyupdater build -D --pyinstaller-log-info --app-version %APPVEYOR_BUILD_VERSION% windows.spec
+  - cmd: pyinstaller -v windows.spec
   - cmd: type .pyupdater\work\windows\warn-windows.txt
-  - pyupdater pkg -p -s
 
 artifacts:
-  - path: 'pyu-data/deploy/*'
+  - path: 'dist/*'
   
 deploy:
   - provider: GitHub
