@@ -37,8 +37,10 @@ install:
 
 test_script:
   - sh: export PYTHONPATH=/home/appveyor/venv3.6
-  - sh: pyinstaller -n "PonyTrainer-nix64-${APPVEYOR_BUILD_VERSION}" linux.spec
-  - cmd: pyinstaller -n PonyTrainer-win-%APPVEYOR_BUILD_VERSION%.exe windows.spec
+  - sh: pyinstaller linux.spec
+  - sh: mv dist/linux dist/PonyTrainer-nix64-${APPVEYOR_BUILD_VERSION}.run
+  - cmd: pyinstaller windows.spec
+  - cmd: move dist/win.exe dist/PonyTrainer-win-%APPVEYOR_BUILD_VERSION%.exe
 
 artifacts:
   - path: 'dist/*'
