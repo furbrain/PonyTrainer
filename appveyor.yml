@@ -40,10 +40,11 @@ test_script:
   - sh: pyinstaller linux.spec
   - sh: mv dist/linux dist/PonyTrainer-nix64-${APPVEYOR_BUILD_VERSION}.run
   - cmd: pyinstaller windows.spec
-  - cmd: move dist/win.exe dist/PonyTrainer-win-%APPVEYOR_BUILD_VERSION%.exe
+  - cmd: move dist\win.exe dist\PonyTrainer-win-%APPVEYOR_BUILD_VERSION%.exe
 
 artifacts:
-  - path: 'dist/*'
+  - path: 'dist/*.exe'
+  - path: 'dist/*.run'
   
 deploy:
   - provider: GitHub
