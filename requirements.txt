@@ -1,9 +1,9 @@
 pyinstaller
-pyupdater~=3.1.1
-pyusb==1.0.2
+pyupdater
+pyusb
 
-wxPython~=4.0.7.post2
-six~=1.13.0
-versioneer~=0.18
-setuptools~=41.6.0
-urllib3~=1.25.6
+wxPython
+six
+versioneer
+setuptools==41.6.0
+urllib3
