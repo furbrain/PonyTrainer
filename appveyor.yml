@@ -12,7 +12,12 @@ environment:
       secure: ybUuwsKZRNlTXAcoY82JYA==
     KEY_PACK_SALT:
       secure: lyep0eVd6GHFcxfNu45Cmvy8SgKaShvCrlr1vpMj8LFs3g4WfM/KPbGtpld77xcTCUu028u5zbFYw+8N11G6Gw==
-    
+    PYU_SSH_USERNAME:
+      secure: yKuHQM7+3bA45Fd4jGnv4g==
+    PYU_SSH_PASSWORD:
+      secure: RPIoVHJYTVd/HiOrF5+kxg==
+    PYU_SSH_HOST: phil.mcunderwood.org
+    PYU_SSH_REMOTE_PATH: webapps/phil_htdocs/releases/
 
 version: '1.0.{build}'
 build: off
@@ -27,20 +32,23 @@ init:
     
 
 install:
-#  - cmd: appveyor-tools\secure-file -decrypt keypack.pyu.enc -secret %KEY_PACK_SECRET% -salt %KEY_PACK_SALT%
-#  - sh: ./appveyor-tools/secure-file -decrypt keypack.pyu.enc -secret $KEY_PACK_SECRET -salt $KEY_PACK_SALT
+  - cmd: appveyor-tools\secure-file -decrypt keypack.pyu.enc -secret %KEY_PACK_SECRET% -salt %KEY_PACK_SALT%
+  - sh: ./appveyor-tools/secure-file -decrypt keypack.pyu.enc -secret $KEY_PACK_SECRET -salt $KEY_PACK_SALT
   - pip3 install --upgrade 'setuptools<45.0'
   - sh: pip3 install -U -f https://extras.wxpython.org/wxPython4/extras/linux/gtk3/ubuntu-18.04 wxPython
   - cmd: pip3 install -U wxPython 
   - pip3 install -r requirements.txt
-  - python3 get_versions.py
+  - python get_versions.py
   - pyupdater keys -i keypack.pyu
 
 test_script:
   - sh: export PYTHONPATH=/home/appveyor/venv3.6
   - sh: pyupdater build --app-version ${APPVEYOR_BUILD_VERSION} linux.spec
   - cmd: pyinstaller windows.spec
-  - tar xzvf pyu-data/new/PonyTrainer*.* -C dist/
+  - sh: tar xzvf pyu-data/new/PonyTrainer*.* -C dist/
+  - sh: mv dist/PonyTrainer dist/PonyTrainer.run
+  - pyupdater pkg -p -s
+  - pyupdater upload --service scp
 
 artifacts:
   - path: 'dist/*.exe'
