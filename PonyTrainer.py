@@ -227,7 +227,7 @@ class ActualMainFrame(gui.PonyFrame):
 
         
     def ShowManual(self, event):  # wxGlade: PonyFrame.<event_handler>
-        manual = self.resource_path('src/manual.pdf')
+        manual = self.resource_path('manual.pdf')
         webbrowser.open(manual)
 
 def print_status_info(info):
