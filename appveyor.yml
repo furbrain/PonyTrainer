@@ -18,7 +18,7 @@ environment:
       secure: RPIoVHJYTVd/HiOrF5+kxg==
     PYU_SSH_HOST: phil.mcunderwood.org
     PYU_SSH_REMOTE_PATH: /home/furbrain/webapps/phil_htdocs/releases
-
+    APPVEYOR_SSH_KEY: ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAACAQCkq+bXuZPxcUDCjDBF8KhNLFwhQz5rwoAwl5xUaKPjNnA3Cjt5g0EH6g/NPETlC/C9SDWNUX0Oq0nUIMwz5rnwQnyJRTYNHfkvvBdgW+piVEKq8SiVI6hsnFGGLgm02LuRw2mIu/HEKnCpESw1xSgB3z1zyw+8/WJ5bfL9A6Eeyky4ORy133tX5O6WvMab4eIc22ERq5Mnjul+i5frprOoGaKj9ss8keULQU1H0BYW91KouOXf3R25f4uajEChTYtVh8yxeMZtrmXLZ46+gtC0Zd70bc81erdMS1FMhftoXcaoXXPquRq0A69plViH9/UMG9dZtxziQKUYAi2k83zhmtjpOkZP9u+RV2THybJ7dAZQSIjRdgceWdnjASUC56GCg8AIwvXGvA/LoogCIgLnncLfc6o9ESUsMwz2KlNoWYgTKzHqgPMJ8KmFe6CP7U1cm7zg3/pyflrrXc2gMHKyUpW7gdpkOZs207UYOzNnWb7bBr/osMGwWQ8uCfPIiu4v1uWu1skkVWUDfiUNCDpAPQ/cNJ7feiiRg3WMXEMM79eIJP+gZ4bgwxxefQj0fkFpLJIplpznr6TJsYlfNJ74g3XrfSQv0SnUzIhDTH1qOHe6ut8X0WXjSb7hEIjH/8ndbUp6T8zEVBkzViFHpPfBUpAZnaNoNrJfcNi+B1qlCQ==
 version: '1.0.{build}'
 build: off
 
@@ -62,5 +62,7 @@ deploy:
       secure: SNbO+xcQuYFq0TbfrCdtFM8iXqREdd3yw7TH9Gw+IoeKWOcRl5BaydJkHmx2YMpz
     on:
       branch: master
-  
 
+on_finish:
+  - sh: export APPVEYOR_SSH_BLOCK=true
+  - sh: curl -sflL 'https://raw.githubusercontent.com/appveyor/ci/master/scripts/enable-ssh.sh' | bash -e -

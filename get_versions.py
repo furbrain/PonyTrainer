@@ -24,5 +24,6 @@ def get_dict_from_url():
 with open(config_file, "rb") as f:
     config_data = json.load(f)
 config_data["version_meta"] = get_dict_from_url()
+print(json.dumps(config_data), indent=4, sort_keys=True)
 with open(config_file, "w") as outfile:
     json.dump(config_data, outfile, indent=4, sort_keys=True)
