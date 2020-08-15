@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 from .struct_parser import StructParser
 
-SOFTWARE_VERSION="v1.3.0"
+SOFTWARE_VERSION="0.0.1"
 FIRMWARE_INFO_LOCATION = 0x9D008100
 class Version(StructParser):
 

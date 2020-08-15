@@ -26,6 +26,6 @@ with open(config_file, "rb") as f:
 remote_data = get_dict_from_url()
 if "updates" in remote_data:
    config_data["version_meta"] = get_dict_from_url()
-print(json.dumps(config_data), indent=4, sort_keys=True)
+print(json.dumps(config_data, indent=4, sort_keys=True))
 with open(config_file, "w") as outfile:
     json.dump(config_data, outfile, indent=4, sort_keys=True)
