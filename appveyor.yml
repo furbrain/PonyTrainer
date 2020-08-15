@@ -43,8 +43,10 @@ install:
 
 test_script:
   - sh: export PYTHONPATH=/home/appveyor/venv3.6
+  - sh: echo "SOFTWARE_VERSION = \"${APPVEYOR_BUILD_VERSION}\"" >> src/version.py
+  - cmd: echo SOFTWARE_VERSION = "%APPVEYOR_BUILD_VERSION%" >> src/version.py
   - sh: pyupdater build --app-version ${APPVEYOR_BUILD_VERSION} linux.spec
-  - cmd: pyinstaller windows.spec
+  - cmd: pyupdater build --app-version %APPVEYOR_BUILD_VERSION% windows.spec
   - sh: tar xzvf pyu-data/new/PonyTrainer*.* -C dist/
   - sh: mv dist/PonyTrainer dist/PonyTrainer.run
   - cmd: move dist\win.exe dist\PonyTrainer.exe
