@@ -50,7 +50,7 @@ test_script:
   - sh: tar xzvf pyu-data/new/PonyTrainer*.* -C dist/
   - sh: mv dist/PonyTrainer dist/PonyTrainer.run
   - cmd: dir pyu-data\new
-  - cmd: tar xzvf pyu-data\new\PonyTrainer*.* -C dist\
+  - cmd: FOR %i IN (pyu-data\new\PonyTrainer*.zip) DO tar xzvf %i  -C dist\
   - pyupdater pkg -p -s
   - pyupdater upload --service scp
 
