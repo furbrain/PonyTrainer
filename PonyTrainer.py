@@ -251,8 +251,6 @@ if app_update:
             app_update.extract_restart()
         else:
             wx.MessageBox("Could not download, starting as normal")
-else:
-    wx.MessageBox("No update available")
 frame = ActualMainFrame(None, wx.ID_ANY, "PonyTrainer")
 PonyTrainer.SetTopWindow(frame)
 frame.Show()
