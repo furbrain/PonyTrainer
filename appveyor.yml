@@ -17,7 +17,7 @@ environment:
     PYU_SSH_PASSWORD:
       secure: RPIoVHJYTVd/HiOrF5+kxg==
     PYU_SSH_HOST: phil.mcunderwood.org
-    PYU_SSH_REMOTE_PATH: webapps/phil_htdocs/releases
+    PYU_SSH_REMOTE_PATH: /home/furbrain/webapps/phil_htdocs/releases
 
 version: '1.0.{build}'
 build: off

@@ -8,7 +8,6 @@ import gzip
 from src.client_config import ClientConfig
 
 config = ClientConfig()
-config.UPDATE_URLS[0] = "https://github.com/furbrain/PonyTrainer/releases/download/0.9.1/"
 
 config_file = os.path.join(".pyupdater", "config.pyu")
 
