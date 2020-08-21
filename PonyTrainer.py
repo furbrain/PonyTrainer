@@ -1,5 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: UTF-8 -*-
+import time
+
 import wx
 import wx.stc
 import os
@@ -21,7 +23,8 @@ from src import client_config
 from pyupdater import client
 
 class ActualMainFrame(gui.PonyFrame):
-    def __init__(self, *args, **kwargs):
+    def __init__(self, asset_folder, *args, **kwargs):
+        self.asset_folder = asset_folder
         super().__init__(*args, **kwargs)
         self.notebook.DeleteAllPages()
         self.bootloader = None
@@ -227,31 +230,56 @@ class ActualMainFrame(gui.PonyFrame):
 
         
     def ShowManual(self, event):  # wxGlade: PonyFrame.<event_handler>
-        manual = self.resource_path('manual.pdf')
+        manual = os.path.join(self.asset_folder, "manual.pdf")
         webbrowser.open(manual)
 
-def print_status_info(info):
-    total = info.get(u'total')
-    downloaded = info.get(u'downloaded')
-    status = info.get(u'status')
-    print(downloaded, total, status)
+class ProgressMonitor:
+    def __init__(self):
+        self.dlg = None
+        self.title = "Downloading"
+        self.asset = "PonyTrainer"
 
+    def update(self, data):
+        if self.dlg is None:
+            self.dlg = wx.ProgressDialog(self.title,"Starting download", maximum=data["total"], style=wx.PD_APP_MODAL)
+            self.dlg.Show()
+        elif data["status"]=="finished":
+            self.dlg.Close()
+            self.dlg = None
+            return
+        elif data["downloaded"] == data["total"]:
+            status = f"{self.asset.capitalize()} download complete"
+        else:
+            status = f"Downloading {self.asset}"
+        self.dlg.Update(data["downloaded"],newmsg=status)
 
 PonyTrainer = wx.App(False)
+monitor = ProgressMonitor()
 update_config = client_config.ClientConfig()
-update_client = client.Client(client_config.ClientConfig(), refresh=True, progress_hooks=[print_status_info])
-print(update_client.data_dir)
-print(update_client.easy_data)
-print(update_client.version)
+update_client = client.Client(client_config.ClientConfig(), refresh=True, progress_hooks=[monitor.update])
 app_update = update_client.update_check(update_config.APP_NAME, version.SOFTWARE_VERSION)
-if app_update:
+asset_folder = update_client.update_folder
+if False and app_update:
     if wx.MessageBox("There is a new version available, update?", "New version", wx.YES_NO)==wx.YES:
+        monitor.title = "Updating PonyTrainer"
+        monitor.asset = "PonyTrainer"
         app_update.download()
         if app_update.is_downloaded():
             app_update.extract_restart()
         else:
             wx.MessageBox("Could not download, starting as normal")
-frame = ActualMainFrame(None, wx.ID_ANY, "PonyTrainer")
+
+for asset in ("manual", "firmware"):
+    monitor.title = "Getting latest " + asset
+    monitor.asset = asset
+    asset_update = update_client.update_check(asset, "0.0.0")
+    if asset_update is not None:
+        if not asset_update.is_downloaded():
+            asset_update.download()
+            if asset_update.is_downloaded():
+                asset_update.extract()
+
+frame = ActualMainFrame(asset_folder, None, wx.ID_ANY, "PonyTrainer")
 PonyTrainer.SetTopWindow(frame)
 frame.Show()
 PonyTrainer.MainLoop()        
