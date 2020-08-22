@@ -193,13 +193,13 @@ class ActualMainFrame(gui.PonyFrame):
         if self.bootloader is None:
             self.no_pony_error()
             return
-        with wx.FileDialog(self, "Open HEX file", wildcard="Hex files (*.hex)|*.hex",
-                               style=wx.FD_OPEN | wx.FD_FILE_MUST_EXIST) as dlg:
-            if dlg.ShowModal() == wx.ID_CANCEL:
-                return
-            path = dlg.GetPath()
+        if wx.MessageBox("Are you sure you want to upgrade your firmware?\n"
+                         "You may lose any data and will need to re-calibrate",
+                         caption="Upgrade Firmware",
+                         style=wx.OK | wx.CANCEL) == wx.CANCEL:
+            return
         try:
-            hexfile  = bootloader.HexFile(path)
+            hexfile  = bootloader.HexFile(os.path.join(self.asset_folder, "firmware.hex"))
         except IOError as e:
             wx.MessageBox("Could not open Hex File\n%s" % e)
         except bootloader.HexFileError as e:
@@ -276,7 +276,7 @@ update_config = client_config.ClientConfig()
 update_client = client.Client(client_config.ClientConfig(), refresh=True, progress_hooks=[monitor.update])
 app_update = update_client.update_check(update_config.APP_NAME, version.SOFTWARE_VERSION)
 asset_folder = update_client.update_folder
-if False and app_update:
+if client.FROZEN and app_update:
     if wx.MessageBox("There is a new version available, update?", "New version", wx.YES_NO)==wx.YES:
         monitor.title = "Updating PonyTrainer"
         monitor.asset = "PonyTrainer"
