@@ -48,7 +48,6 @@ test_script:
   - sh: pyupdater build --app-version ${APPVEYOR_BUILD_VERSION} linux.spec
   - cmd: pyupdater build --app-version %APPVEYOR_BUILD_VERSION% windows.spec
   - python extract_executable.py
-  - sh: mv dist/PonyTrainer dist/PonyTrainer.run
   - pyupdater pkg -p -s
   - pyupdater upload --service scp
 

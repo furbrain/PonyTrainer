@@ -1,5 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: UTF-8 -*-
+import platform
+import subprocess
 import time
 
 import wx
@@ -228,10 +230,25 @@ class ActualMainFrame(gui.PonyFrame):
         base_path = getattr(sys, '_MEIPASS', os.path.dirname(os.path.abspath(__file__)))
         return os.path.join(base_path, relative_path)
 
-        
+
+    def fix_env(self):
+        lib_key = "LD_LIBRARY_PATH"
+        self.env_backup = os.environ.get(lib_key)
+        orig = os.environ.get(lib_key + "_ORIG")
+        if orig is None:
+            os.environ.pop(lib_key)
+        else:
+            os.environ[lib_key] = orig
+
+    def restore_env(self):
+        os.environ["LD_LIBRARY_PATH"] = self.env_backup
+
     def ShowManual(self, event):  # wxGlade: PonyFrame.<event_handler>
         manual = os.path.join(self.asset_folder, "manual.pdf")
+        self.fix_env()
         webbrowser.open(manual)
+        self.restore_env()
+
 
 class ProgressMonitor:
     def __init__(self):
