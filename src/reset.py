@@ -1,16 +1,14 @@
 #!/usr/bin/python3
 
-import time
-import SH1106
-import bootloader
 import sys
-import datetime
+
+from . import bootloader
 
 try:
     print("Connecting to device")
-    prog = bootloader.Programmer()
+    programmer = bootloader.Programmer()
     print("Device found, resetting")
-    prog.reset()
+    programmer.reset()
 except bootloader.ProgrammerError as e:
     print(e)
     sys.exit(1)

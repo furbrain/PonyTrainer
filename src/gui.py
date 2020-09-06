@@ -6,14 +6,14 @@
 
 import wx
 import wx.adv
+# begin wxGlade: extracode
+import wx.lib.docview
+
+from . import version
+
 
 # begin wxGlade: dependencies
 # end wxGlade
-
-# begin wxGlade: extracode
-from .svxtextctrl import SVXTextCtrl
-import wx.lib.docview
-from . import version
 # end wxGlade
 
 

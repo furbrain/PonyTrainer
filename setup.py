@@ -1,4 +1,3 @@
-import versioneer
 import setuptools
 
 with open("README.md", "r") as fh:
@@ -6,8 +5,6 @@ with open("README.md", "r") as fh:
 
 setuptools.setup(
     name="PonyTrainer",
-    version=versioneer.get_version(),
-    cmdclass=versioneer.get_cmdclass(),
     author="Phil Underwood",
     author_email="beardydoc@gmail.com",
     description="Companion program for the Shetland Attack Pony 5",

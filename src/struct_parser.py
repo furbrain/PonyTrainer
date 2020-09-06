@@ -1,16 +1,23 @@
-import six
-import struct
 import array
 import json
+import struct
+from typing import List, Tuple
+
+import six
+
 
 class StructParser:
+    """
+    @DynamicAttrs
+    """
     ALIGNMENT = 1
-    
+    FMT: List[Tuple[str, str]] = None
+
     @classmethod
     def create_empty(cls):
-        zero_array = array.array('b',[0]*cls.get_len())
+        zero_array = array.array('b', [0] * cls.get_len())
         return cls.from_buffer(zero_array)
-    
+
     @classmethod
     def from_buffer(cls, buff, fmt=None):
         obj = cls()
@@ -27,12 +34,12 @@ class StructParser:
                     setattr(obj, key, struct.unpack_from(value, buff, offset)[0])
                 offset += struct.calcsize(value)
             else:
-                subobj = StructParser.from_buffer(buff[offset:], value)
-                setattr(obj, key, subobj)
-                offset += subobj.get_len(value)
+                child = StructParser.from_buffer(buff[offset:], value)
+                setattr(obj, key, child)
+                offset += child.get_len(value)
         return obj
 
-    @classmethod        
+    @classmethod
     def get_len(cls, fmt=None):
         if fmt is None:
             fmt = cls.FMT
@@ -45,29 +52,30 @@ class StructParser:
         if length % cls.ALIGNMENT:
             length += cls.ALIGNMENT - (length % cls.ALIGNMENT)
         return length
-        
-                    
+
     def is_list(self, value):
-        if value[-1]=="s": return False
+        if value[-1] == "s":
+            return False
         if value[0] in '=<>!@':
             char = value[1]
         else:
             char = value[0]
-        if char.isdigit(): return True
-        
+        if char.isdigit():
+            return True
+
     def is_valid(self):
         raise NotImplemented
-        
+
     def as_str(self, indent=0):
         text = ""
         for key, value in self.FMT:
             if isinstance(value, six.string_types):
-                text += " "*indent*4 + key +": " + str(getattr(self, key)) + "\n"
+                text += " " * indent * 4 + key + ": " + str(getattr(self, key)) + "\n"
             else:
-                text += " "*indent*4 + key +":\n"
-                text += getattr(self, key).as_str(indent+1)
+                text += " " * indent * 4 + key + ":\n"
+                text += getattr(self, key).as_str(indent + 1)
         return text
-        
+
     def as_dict(self):
         result = {}
         for key, value in self.FMT:
@@ -76,8 +84,8 @@ class StructParser:
             else:
                 result[key] = getattr(self, key).as_dict()
         return result
-    
-    @classmethod            
+
+    @classmethod
     def from_dict(cls, dct, fmt=None):
         obj = cls()
         if fmt is None:
@@ -91,14 +99,13 @@ class StructParser:
             if isinstance(value, six.string_types):
                 setattr(obj, key, dct[key])
             else:
-                subobj = StructParser.from_dict(dct[key], value)
-                setattr(obj, key, subobj)
+                child = StructParser.from_dict(dct[key], value)
+                setattr(obj, key, child)
         return obj
-                
-        
+
     def __repr__(self):
         return self.as_str()
-                
+
     @classmethod
     def read_array(cls, data):
         offset = 0
@@ -108,16 +115,17 @@ class StructParser:
             while True:
                 obj = cls.from_buffer(data[offset:])
                 offset += obj_size
-                if obj.is_valid(): arr.append(obj)
+                if obj.is_valid():
+                    arr.append(obj)
         except struct.error:
             pass
         return arr
-        
+
+
 class StructEncoder(json.JSONEncoder):
     def default(self, o):
         try:
             return o.as_dict()
-        except:
+        except AttributeError:
             pass
         return super().default(o)
-        

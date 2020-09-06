@@ -144,7 +144,7 @@ Please note timekeeping is currently very inaccurate
 
 ### Visualise
 If you have been storing your recorded legs, this allows you to see what you have recorded so far.
-You will see all the legs recorded in the curent survey, move the device to get a different perspective.
+You will see all the legs recorded in the current survey, move the device to get a different perspective.
 Hold the device horizontal and you will see it in plan view. Hold it vertically and you will get an elevation.
 
 Not fully tested
@@ -162,7 +162,7 @@ Show the raw sensor readings. Magnetic readings are in μT, gravitational readin
 Show the calibrated readings, the top reading is the total field strength (in μT for magnetism, g for gravity).
 
 #### Bearings
-Show the current compass and clin readings for the device. Press on the top of the device to see the effect
+Show the current compass and clino readings for the device. Press on the top of the device to see the effect
 of squeezing it too tightly!
 
 ### Off

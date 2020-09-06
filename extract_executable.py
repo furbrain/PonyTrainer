@@ -2,7 +2,7 @@ import shutil
 import glob
 import os.path
 
-original_dir_glob = os.path.join("pyu-data","new","*")
+original_dir_glob = os.path.join("pyu-data", "new", "*")
 
 zips = glob.glob(original_dir_glob)
 
