@@ -3,6 +3,7 @@
 import platform
 import subprocess
 import time
+from inspect import cleandoc
 
 import wx
 import wx.stc
@@ -17,6 +18,7 @@ from src import gui
 from src import importer
 from src import svxtextctrl
 from src import bootloader
+from src import hexfile
 from src import config
 from src import calibration
 from src import struct_parser
@@ -24,16 +26,28 @@ from src import version
 from src import client_config
 from pyupdater import client
 
+from src.version import Version
+
+
 class ActualMainFrame(gui.PonyFrame):
     def __init__(self, asset_folder, *args, **kwargs):
-        self.asset_folder = asset_folder
         super().__init__(*args, **kwargs)
+        self.asset_folder = asset_folder
+        try:
+            self.hexfile = hexfile.HexFile(os.path.join(self.asset_folder, "firmware.hex"))
+        except (IOError, hexfile.HexFileError):
+            self.hexfile = None
+            self.frame_statusbar.SetStatusText("No firmware available",2)
+        else:
+            v = version.Version.from_data_source(self.hexfile)
+            self.frame_statusbar.SetStatusText(f"Available Firmware: {v.as_semantic()}",2)
         self.notebook.DeleteAllPages()
         self.bootloader = None
         self.timer = wx.Timer(self)
         self.Bind(wx.EVT_TIMER, self.check_bootloader, self.timer)
         self.timer.Start(1000)
         self.Bind(wx.EVT_CLOSE, self.OnClose)
+
         
     def create_pane(self, pane=None, ctrl = None, focus=True):
         if pane is None:
@@ -75,13 +89,16 @@ class ActualMainFrame(gui.PonyFrame):
                 pass
             else:
                 self.frame_statusbar.SetStatusText("Connected to " + self.bootloader.get_name(), 0)
+                v = version.Version.from_data_source(self.bootloader)
+                self.frame_statusbar.SetStatusText(f"Device Firmware: {v.as_semantic()}", 1)
         else:
             try:
                 self.bootloader.read_program(0x9d000000,1)
             except IOError:
                 self.bootloader = None
                 self.frame_statusbar.SetStatusText("Disconnected", 0)
-               
+                self.frame_statusbar.SetStatusText("Device Firmware: ---", 1)
+
     def no_pony_error(self):
         msg = wx.MessageDialog(self, "No Pony attached").ShowModal()
                 
@@ -193,29 +210,37 @@ class ActualMainFrame(gui.PonyFrame):
         if self.bootloader is None:
             self.no_pony_error()
             return
+        if self.hexfile is None:
+            wx.MessageBox("Firmware not found")
+            return
+
+        # check versions
+        current_ver = Version.from_data_source(self.bootloader)
+        next_ver = Version.from_data_source(self.hexfile)
+        if current_ver >= next_ver:
+            if wx.MessageBox(cleandoc(f"""
+                                Your current version is {current_ver.as_semantic()},
+                                but you are trying to install {next_ver.as_semantic()}.
+                                Are you sure you want to proceed?"""),
+                             caption="Firmware version conflict",
+                             style=wx.YES_NO | wx.CENTER | wx.NO_DEFAULT) == wx.NO:
+                return
         if wx.MessageBox("Are you sure you want to upgrade your firmware?\n"
                          "You may lose any data and will need to re-calibrate",
                          caption="Upgrade Firmware",
                          style=wx.OK | wx.CANCEL) == wx.CANCEL:
             return
+        offset = self.bootloader.user_range[0]
+        maximum = self.bootloader.user_range[1]-offset
         try:
-            hexfile  = bootloader.HexFile(os.path.join(self.asset_folder, "firmware.hex"))
-        except IOError as e:
-            wx.MessageBox("Could not open Hex File\n%s" % e)
-        except bootloader.HexFileError as e:
-            wx.MessageBox("Invalid Hex File\n%s" % e)
-        else:
-            offset = self.bootloader.user_range[0]
-            maximum = self.bootloader.user_range[1]-offset
-            try:
-                with wx.ProgressDialog("Updating Firmware", "Writing...", maximum) as dlg:
-                    self.bootloader.write_program(hexfile, set_progress=lambda x: dlg.Update(x-offset))
-                    dlg.Update(0,"Verifying...")
-                    self.bootloader.verify_program(hexfile,set_progress=lambda x: dlg.Update(x-offset))
-                    self.bootloader.write_datetime(datetime.datetime.now())
-                wx.MessageBox("Programming complete")
-            except bootloader.ProgrammerError as e:
-                wx.MessageBox("Firmware update failed\n%s" % e, "Error")
+            with wx.ProgressDialog("Updating Firmware", "Writing...", maximum) as dlg:
+                self.bootloader.write_program(self.hexfile, set_progress=lambda x: dlg.Update(x-offset))
+                dlg.Update(0,"Verifying...")
+                self.bootloader.verify_program(self.hexfile,set_progress=lambda x: dlg.Update(x-offset))
+                self.bootloader.write_datetime(datetime.datetime.now())
+            wx.MessageBox("Programming complete")
+        except bootloader.ProgrammerError as e:
+            wx.MessageBox("Firmware update failed\n%s" % e, "Error")
                 
     def DeviceSetClock(self, event):
         if self.bootloader is None:
