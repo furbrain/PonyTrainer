@@ -1,6 +1,7 @@
 #!/usr/bin/python3
 import datetime
 
+from src.version import FIRMWARE_INFO_LOCATION, Version
 from .struct_parser import StructParser
 from . import version
 
@@ -32,7 +33,7 @@ class Leg(StructParser):
         return self.time != 0xffffffff
 
 def read_legs(bootloader):
-    fw_info = version.get_firmware_info(bootloader)
+    fw_info = Version.from_data_source(bootloader)
     data = bootloader.read_program(fw_info.legs.location, fw_info.legs.size)
     legs = Leg.read_array(data)
     return legs

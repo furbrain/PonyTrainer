@@ -3,7 +3,7 @@ import sparse_list
 import operator
 from functools import reduce
 
-from version import Version
+from . import version
 
 class HexFileError(Exception):
         def _init__(self,value):
@@ -15,7 +15,7 @@ class HexFile:
     def __init__(self,fname):
         self.program = sparse_list.SparseList(0x100000000)
         page = 0;
-        with open(fname, "rU") as f:
+        with open(fname, "r") as f:
             for s in f:
                 if (s[0] == ":"):
                     #good - it starts sensibly...
@@ -54,15 +54,20 @@ class HexFile:
     def insert(self, address, data):
         l =len(data)
         self.program[address:address+l] = data
-        
-    def get_fw_info(self):
-        addr = Version.LOCATION
-        data = self.program[addr : addr + Version.get_len()]
+
+    def get_data_slice(self, address, length):
+        data = self.program[address: address+length]
         data = [0 if x is None else x for x in data]
-        info = Version.from_data(bytes(data))
+        return bytes(data)
+
+    def get_fw_info(self):
+        data = self.get_data_slice(version.FIRMWARE_INFO_LOCATION, version.Version.get_len())
+        info = version.Version.from_data(bytes(data))
         return info
 
 if __name__=="__main__":
     import sys
     hexfile  = HexFile(sys.argv[1])
-    print(hexfile.get_fw_info())
+    data = hexfile.get_data_slice(version.FIRMWARE_INFO_LOCATION, version.Version.get_len())
+    info = version.Version.from_data(bytes(data))
+    print(info)

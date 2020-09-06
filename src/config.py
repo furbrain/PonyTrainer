@@ -1,4 +1,5 @@
 #!/usr/bin/python3
+from src.version import Version
 from .struct_parser import StructParser
 from . import version
 
@@ -40,7 +41,7 @@ def default_config():
     return c
             
 def get_config(bootloader):
-    fw_info = bootloader.get_fw_info()
+    fw_info = Version.from_data_source(bootloader)
 
     conf = default_config()
     for i in range(fw_info.config.location, fw_info.config.location + fw_info.config.size, Config.get_len()):

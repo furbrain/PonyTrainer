@@ -134,7 +134,9 @@ class Programmer:
             count -= quantity
             address += quantity
         return results
-            
+
+    def get_data_slice(self, address, length):
+        return self.read_program(address, length)
 		
     def verify_program(self,hexfile,set_range=None,set_progress=None):
         if set_range:

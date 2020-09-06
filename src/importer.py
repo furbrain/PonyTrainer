@@ -25,7 +25,6 @@ TEMPLATE = """\
 class ActualImportDialog(gui.ImportDialog):
     def __init__(self, parent, bootloader):
         gui.ImportDialog.__init__(self, parent)
-        ###FIXME### get config details from pony
         self.bootloader = bootloader
         self.config = config.get_config(bootloader)
         self.surveys = legs.get_all_surveys(bootloader)
