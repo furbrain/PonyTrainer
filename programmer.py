@@ -1,8 +1,8 @@
 #!/usr/bin/python3
 
 import time
-import bootloader
-import hexfile
+from src import bootloader
+from src import hexfile
 import sys
 import datetime
     
@@ -19,7 +19,7 @@ try:
     print("Connecting to device")
     prog = bootloader.Programmer()
     print("%s found" % prog.get_name())
-    fw_info = prog.get_fw_info()
+    #fw_info = prog.get_fw_info()
     #config = prog.read_program(fw_info.config.location, fw_info.config.size)
     #legs = prog.read_program(fw_info.legs.location, fw_info.legs.size)    
     print("Loading hexfile")
