@@ -35,8 +35,8 @@ install:
   - cmd: appveyor-tools\secure-file -decrypt keypack.pyu.enc -secret %KEY_PACK_SECRET% -salt %KEY_PACK_SALT%
   - sh: ./appveyor-tools/secure-file -decrypt keypack.pyu.enc -secret $KEY_PACK_SECRET -salt $KEY_PACK_SALT
   - pip3 install --upgrade 'setuptools<45.0'
-  - sh: pip3 install -U -f https://extras.wxpython.org/wxPython4/extras/linux/gtk3/ubuntu-18.04 wxPython
-  - cmd: pip3 install -U wxPython 
+  - sh: pip3 install -f https://extras.wxpython.org/wxPython4/extras/linux/gtk3/ubuntu-18.04 'wxPython==4.1.0'
+  - cmd: pip3 install "wxPython==4.1.0"
   - pip3 install -r requirements.txt
   - python get_versions.py
   - pyupdater keys -i keypack.pyu

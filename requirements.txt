@@ -2,8 +2,6 @@ pyinstaller
 pyupdater~=3.1.1
 pyupdater-scp-plugin
 pyusb
-
-wxPython~=4.0.7.post2
 six~=1.15.0
 versioneer~=0.18
 setuptools==41.6.0
