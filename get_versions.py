@@ -2,8 +2,9 @@ import io
 import json
 import os
 
-import urllib3
+import urllib.request
 import gzip
+import ssl
 
 from src.client_config import ClientConfig
 
@@ -14,12 +15,15 @@ config_file = os.path.join(".pyupdater", "config.pyu")
 
 def get_dict_from_url():
     name = config.UPDATE_URLS[0] + "versions.gz"
-    fname = urllib3.PoolManager().request('GET', name)
-    if fname.status != 200:
-        print("Remote Version not found")
+    print("Retrieving ", name)
+    ctx = ssl.create_default_context()
+    try:
+        response = urllib.request.urlopen(name, context=ctx)
+    except OSError as e:
+        print("Remote Version not found, ", e)
         return {}
     else:
-        g = gzip.open(io.BytesIO(fname.data))
+        g = gzip.open(response)
         return json.load(g)
 
 
