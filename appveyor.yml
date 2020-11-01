@@ -51,8 +51,7 @@ test_script:
   - pyupdater upload --service scp
 
 artifacts:
-  - path: 'dist/*.exe'
-  - path: 'dist/*.run'
+  - path: 'dist/*'
   
 deploy:
   - provider: GitHub
