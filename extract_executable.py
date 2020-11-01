@@ -7,6 +7,7 @@ original_dir_glob = os.path.join("pyu-data", "new", "*")
 zips = glob.glob(original_dir_glob)
 
 for z in zips:
+    print("Unzipping: ",z)
     try:
         shutil.unpack_archive(z, "dist")
     except ValueError:
