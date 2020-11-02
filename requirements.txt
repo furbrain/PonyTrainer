@@ -5,3 +5,4 @@ pyusb
 six~=1.15.0
 versioneer~=0.18
 setuptools==41.6.0
+sparse_list

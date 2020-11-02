@@ -46,6 +46,7 @@ test_script:
   - cmd: echo SOFTWARE_VERSION = "%APPVEYOR_BUILD_VERSION%" >> src/version.py
   - sh: pyupdater build --app-version ${APPVEYOR_BUILD_VERSION} linux.spec
   - cmd: pyupdater build --app-version %APPVEYOR_BUILD_VERSION% windows.spec
+  - pyupdater collect-debug-info
   - python extract_executable.py
   - pyupdater pkg -p -s
   - pyupdater upload --service scp
