@@ -32,7 +32,10 @@ class ActualImportDialog(gui.ImportDialog):
         pprint(self.surveys)
         for idx, s in enumerate(self.surveys.values()):
             self.survey_list.Append([s['time'].strftime("%Y-%m-%d %Hh%M"), s['station_count'], s['leg_count']])
+            print("setting item: ", idx, "to: ", s['survey'])
             self.survey_list.SetItemData(idx, s['survey'])
+        for i in range(len(self.surveys)):
+            print("getting item: ", i, "is: ", self.survey_list.GetItemData(i))
         self.survey_list.SortItems(self.sort_list)
         self.survey_list.SetColumnWidth(0, -1)
         self.survey_list.SetColumnWidth(1, -2)
