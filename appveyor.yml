@@ -61,14 +61,14 @@ deploy:
       secure: SNbO+xcQuYFq0TbfrCdtFM8iXqREdd3yw7TH9Gw+IoeKWOcRl5BaydJkHmx2YMpz
     on:
       branch: master
-  - provider: FTP
-    protocol: sftp
-    host: lynx.mythic-beasts.com
-    username: furbrain
-    password:
-      secure: DwrrXPpNAL/xQ4Byqz465w==
-    folder: www/www.shetlandattackpony.co.uk/static/
-    artifact:
+#  - provider: FTP
+#    protocol: sftp
+#    host: lynx.mythic-beasts.com
+#    username: furbrain
+#    password:
+#      secure: DwrrXPpNAL/xQ4Byqz465w==
+#    folder: www/www.shetlandattackpony.co.uk/static/
+#    artifact:
     
 #on_finish:
 #  - sh: export APPVEYOR_SSH_BLOCK=true

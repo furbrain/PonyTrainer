@@ -89,23 +89,23 @@ class SVXTextCtrl(wx.stc.StyledTextCtrl):
     def style_line(self, line):
         start_pos = self.GetLineEndPosition(line - 1) + 1
         text = self.GetLine(line)
-        self.StartStyling(start_pos, 255)
+        self.StartStyling(start_pos)
         self.SetStyling(len(text), 0)
 
         # highlight commands
         command = re.match(r"^\s*\*(\w+)", text)
         if command:
             if command.group(1) in self.COMMANDS:
-                self.StartStyling(start_pos, 255)
+                self.StartStyling(start_pos)
                 self.SetStyling(len(command.group()), COMMAND_STYLE)
                 self.SetStyling(len(text) - len(command.group()), VARIABLE_STYLE)
             else:
-                self.StartStyling(start_pos, 255)
+                self.StartStyling(start_pos)
                 self.SetStyling(len(command.group()), ERROR_STYLE)
 
         # highlight strings
         for match in re.finditer(r'".*?"', text):
-            self.StartStyling(match.start() + start_pos, 255)
+            self.StartStyling(match.start() + start_pos)
             self.SetStyling(len(match.group()), STRING_STYLE)
 
         # highlight comments
@@ -115,7 +115,7 @@ class SVXTextCtrl(wx.stc.StyledTextCtrl):
                 in_string = not in_string
             if char == ';':
                 if not in_string:
-                    self.StartStyling(i + start_pos, 255)
+                    self.StartStyling(i + start_pos)
                     self.SetStyling(len(text) - i, COMMENT_STYLE)
                     break
 

@@ -1,4 +1,5 @@
 import math
+from pprint import pprint
 
 from . import config
 from . import gui
@@ -27,6 +28,8 @@ class ActualImportDialog(gui.ImportDialog):
         self.bootloader = bootloader
         self.config = config.get_config(bootloader)
         self.surveys = legs.get_all_surveys(bootloader)
+        print("surveys: ")
+        pprint(self.surveys)
         for idx, s in enumerate(self.surveys.values()):
             self.survey_list.Append([s['time'].strftime("%Y-%m-%d %Hh%M"), s['station_count'], s['leg_count']])
             self.survey_list.SetItemData(idx, s['survey'])
@@ -36,6 +39,7 @@ class ActualImportDialog(gui.ImportDialog):
         self.survey_list.SetColumnWidth(2, -2)
 
     def sort_list(self, item1, item2):
+        print("sorting: ", item1, item2)
         return self.surveys[item1]['time'] < self.surveys[item2]['time']
 
     def get_config(self):
