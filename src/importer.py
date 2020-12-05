@@ -31,7 +31,9 @@ class ActualImportDialog(gui.ImportDialog):
         print("surveys: ")
         pprint(self.surveys)
         for idx, s in enumerate(self.surveys.values()):
-            self.survey_list.Append([s['time'].strftime("%Y-%m-%d %Hh%M"), s['station_count'], s['leg_count']])
+            self.survey_list.InsertItem(idx, s['time'].strftime("%Y-%m-%d %Hh%M"))
+            self.survey_list.SetItem(idx, 1, str(s['station_count']))
+            self.survey_list.SetItem(idx, 2, str(s['leg_count']))
             print("setting item: ", idx, "to: ", s['survey'])
             self.survey_list.SetItemData(idx, s['survey'])
         for i in range(len(self.surveys)):
