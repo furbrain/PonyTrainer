@@ -36,3 +36,4 @@ MPLABXLog*
 /.pyupdater/
 /pyu-data/
 keypack.pyu
+/venv/
