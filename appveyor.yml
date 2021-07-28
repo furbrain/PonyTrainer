@@ -17,7 +17,7 @@ environment:
       secure: DwrrXPpNAL/xQ4Byqz465w==
     PYU_SSH_HOST: lynx.mythic-beasts.com
     PYU_SSH_REMOTE_PATH: /home/furbrain/www/www.shetlandattackpony.co.uk/releases/
-    APPVEYOR_SSH_KEY: ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAACAQCkq+bXuZPxcUDCjDBF8KhNLFwhQz5rwoAwl5xUaKPjNnA3Cjt5g0EH6g/NPETlC/C9SDWNUX0Oq0nUIMwz5rnwQnyJRTYNHfkvvBdgW+piVEKq8SiVI6hsnFGGLgm02LuRw2mIu/HEKnCpESw1xSgB3z1zyw+8/WJ5bfL9A6Eeyky4ORy133tX5O6WvMab4eIc22ERq5Mnjul+i5frprOoGaKj9ss8keULQU1H0BYW91KouOXf3R25f4uajEChTYtVh8yxeMZtrmXLZ46+gtC0Zd70bc81erdMS1FMhftoXcaoXXPquRq0A69plViH9/UMG9dZtxziQKUYAi2k83zhmtjpOkZP9u+RV2THybJ7dAZQSIjRdgceWdnjASUC56GCg8AIwvXGvA/LoogCIgLnncLfc6o9ESUsMwz2KlNoWYgTKzHqgPMJ8KmFe6CP7U1cm7zg3/pyflrrXc2gMHKyUpW7gdpkOZs207UYOzNnWb7bBr/osMGwWQ8uCfPIiu4v1uWu1skkVWUDfiUNCDpAPQ/cNJ7feiiRg3WMXEMM79eIJP+gZ4bgwxxefQj0fkFpLJIplpznr6TJsYlfNJ74g3XrfSQv0SnUzIhDTH1qOHe6ut8X0WXjSb7hEIjH/8ndbUp6T8zEVBkzViFHpPfBUpAZnaNoNrJfcNi+B1qlCQ==
+    APPVEYOR_SSH_KEY: ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABgQDSh8jezbEvZ6hjCq4ZpHU0uy5eOUUULgZbDha7X6xI1COn5HJ+DW2Zml7d26KjqeCi3vE8mcFM91bB441NcJPDu2Q/LSASz1iMiiAuEiaF8LTnm6fQWOOZ+6FYZM0U13TDsVHyd3gUMv7IMYR0KlhQhWhre1/gtbNlhshkIarEYi8ZE+AR72vSwmuod9NfK7zF4qu7krt+W4BE/5cvCSGM9xYnJ1rnd36lwTBQHg/ev9sMk5RvIsFszFk61FaC5kKlIWZ7cWNT9YSi2Wr2a6OENozzzg5A98dWzKZpVfufqSMJ1PAYT6++k4SnOyOeuI/gyvTgF2aiUIYrpvh3ouEGO3VXcixWtTVAm3SNoYJeM1Zn3mMyKvz/6RjpXJlcfgUcbJaHb9tsjfp1KHYtpiQdKUGU1CWfZfrAP0WfYSkCW+M/BISBwgV7lDKw5K3k/cnIbc+o8TrdgLY693zOED1MaW4TuBNy9ZRV7341yrJcBOZHs3XHhHDfMr1Yh44Yzic=
 version: '1.0.{build}'
 build: off
 
@@ -48,8 +48,11 @@ test_script:
   - cmd: pyupdater build --app-version %APPVEYOR_BUILD_VERSION% windows.spec
   - pyupdater collect-debug-info
   - python extract_executable.py
+  - sh: ls pyu-data/*
   - pyupdater pkg -p -s
+  - sh: ls pyu-data/*
   - pyupdater upload --service scp
+  - sh: ls pyu-data/*
 
 artifacts:
   - path: 'dist/*'
@@ -70,6 +73,6 @@ deploy:
 #    folder: www/www.shetlandattackpony.co.uk/static/
 #    artifact:
     
-#on_finish:
-#  - sh: export APPVEYOR_SSH_BLOCK=true
-#  - sh: curl -sflL 'https://raw.githubusercontent.com/appveyor/ci/master/scripts/enable-ssh.sh' | bash -e -
+on_finish:
+  - sh: export APPVEYOR_SSH_BLOCK=true
+  - sh: curl -sflL 'https://raw.githubusercontent.com/appveyor/ci/master/scripts/enable-ssh.sh' | bash -e -
