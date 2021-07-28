@@ -48,11 +48,8 @@ test_script:
   - cmd: pyupdater build --app-version %APPVEYOR_BUILD_VERSION% windows.spec
   - pyupdater collect-debug-info
   - python extract_executable.py
-  - sh: ls pyu-data/*
   - pyupdater pkg -p -s
-  - sh: ls pyu-data/*
   - pyupdater upload --service scp
-  - sh: ls pyu-data/*
 
 artifacts:
   - path: 'dist/*'
@@ -73,6 +70,6 @@ deploy:
 #    folder: www/www.shetlandattackpony.co.uk/static/
 #    artifact:
     
-on_finish:
-  - sh: export APPVEYOR_SSH_BLOCK=true
-  - sh: curl -sflL 'https://raw.githubusercontent.com/appveyor/ci/master/scripts/enable-ssh.sh' | bash -e -
+# on_finish:
+#  - sh: export APPVEYOR_SSH_BLOCK=true
+#  - sh: curl -sflL 'https://raw.githubusercontent.com/appveyor/ci/master/scripts/enable-ssh.sh' | bash -e -

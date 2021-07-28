@@ -1,4 +1,5 @@
-pyinstaller
+pyinstaller==4.3
+dsdev_utils==1.0.5
 pyupdater~=3.1.1
 pyupdater-scp-plugin
 pyusb
