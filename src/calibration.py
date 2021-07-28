@@ -16,8 +16,14 @@ class Calibration(StructParser):
         return not math.isnan(self.mag[0])
 
 
+CAL_CLASSES = {
+    1: Calibration,
+}
+
+
 def read_cal(bootloader):
     fw_info = Version.from_data_source(bootloader)
-    data = bootloader.read_program(fw_info.calibration.location, Calibration.get_len())
-    cal = Calibration.from_buffer(data)
+    cal_class = CAL_CLASSES[fw_info.calibration.version]
+    data = bootloader.read_program(fw_info.calibration.location, cal_class.get_len())
+    cal = cal_class.from_buffer(data)
     return cal
