@@ -128,6 +128,7 @@ class ActualMainFrame(gui.PonyFrame):
             self.no_pony_error()
             return
         data = {'name': self.bootloader.get_name(),
+                'firmware': Version.from_data_source(self.bootloader),
                 'shots': calibration.read_cal(self.bootloader),
                 'conf': config.get_config(self.bootloader)}
         with wx.FileDialog(self, "Save Calibration", wildcard="Calibration file (*.cal)|*.cal",
@@ -316,7 +317,7 @@ for asset in ("manual", "firmware"):
         if not asset_update.is_downloaded():
             asset_update.download()
             if asset_update.is_downloaded():
-                asset_update.extract()
+                asset_update._extract_update()
 
 frame = ActualMainFrame(assets, None, wx.ID_ANY, "PonyTrainer")
 PonyTrainer.SetTopWindow(frame)
