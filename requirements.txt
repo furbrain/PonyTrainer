@@ -5,5 +5,5 @@ pyupdater-scp-plugin
 pyusb
 six~=1.15.0
 versioneer~=0.18
-setuptools==41.6.0
+setuptools==65.5.1
 sparse_list
